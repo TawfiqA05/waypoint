@@ -1,0 +1,215 @@
+:root {
+  --ink: #182130;
+  --ink-soft: #4a5568;
+  --paper: #eef1ec;
+  --card: #ffffff;
+  --line: #d7ddd4;
+  --stamp: #2456a6;      /* visa-stamp blue */
+  --route: #c8402f;      /* route red — must-do only */
+  --moss: #3e6b52;       /* verified green */
+  --amber: #9a6b1f;
+  --radius: 10px;
+  --display: 'Familjen Grotesk', system-ui, sans-serif;
+  --body: 'Instrument Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: 14px; }
+a { color: var(--stamp); }
+
+.shell { max-width: 980px; margin: 0 auto; padding: 20px 16px 80px; }
+
+/* ---------- Masthead ---------- */
+.masthead { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; flex-wrap: wrap; }
+.masthead h1 {
+  font-family: var(--display); font-weight: 700; font-size: 22px; letter-spacing: -0.02em; margin: 0;
+}
+.masthead h1 span { color: var(--stamp); }
+.masthead .tag { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.08em; }
+.settings-btn { margin-left: auto; background: none; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: 12.5px; color: var(--ink-soft); }
+.settings-btn:hover { border-color: var(--ink-soft); }
+
+/* ---------- Search ---------- */
+.search-row { display: flex; gap: 8px; }
+.search-row input {
+  flex: 1; padding: 13px 16px; border: 1.5px solid var(--ink); border-radius: var(--radius);
+  background: var(--card); font-size: 16px; min-width: 0;
+}
+.search-row input:focus { outline: 3px solid color-mix(in srgb, var(--stamp) 30%, transparent); }
+.search-row button {
+  padding: 13px 22px; border: none; border-radius: var(--radius);
+  background: var(--ink); color: var(--card); font-weight: 600; font-size: 15px;
+}
+.search-row button:hover { background: var(--stamp); }
+.search-row button:disabled { opacity: 0.5; cursor: wait; }
+.trip-meta { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.trip-meta label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; }
+.trip-meta input, .trip-meta select { padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); }
+
+/* ---------- Dossier header (the signature) ---------- */
+.dossier {
+  margin-top: 22px; background: var(--card); border: 1.5px solid var(--ink);
+  border-radius: var(--radius); overflow: hidden; position: relative;
+}
+.dossier-photo { width: 100%; height: 180px; object-fit: cover; display: block; border-bottom: 1.5px solid var(--ink); }
+.dossier-body { padding: 18px 20px 16px; }
+.dossier h2 { font-family: var(--display); font-size: clamp(26px, 5vw, 38px); font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+.dossier .coords {
+  font-family: var(--mono); font-size: 11.5px; color: var(--ink-soft);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-top: 6px;
+  border-top: 1px dashed var(--line); padding-top: 8px; display: flex; gap: 16px; flex-wrap: wrap;
+}
+.photo-credit { position: absolute; top: 6px; right: 10px; font-size: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+.photo-credit a { color: #fff; }
+
+/* ---------- Tabs ---------- */
+.tabbar { display: flex; gap: 4px; margin-top: 18px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.tabbar button {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink-soft);
+  padding: 9px 14px; border-radius: 8px 8px 0 0; font-size: 13.5px; font-weight: 500; white-space: nowrap;
+  border-bottom: none;
+}
+.tabbar button[aria-selected="true"] {
+  background: var(--ink); color: var(--card); border-color: var(--ink); font-weight: 600;
+}
+.panel {
+  background: var(--card); border: 1px solid var(--line); border-radius: 0 var(--radius) var(--radius) var(--radius);
+  padding: 20px; min-height: 200px;
+}
+
+/* ---------- Section headings ---------- */
+.panel h3 {
+  font-family: var(--display); font-size: 17px; font-weight: 700; margin: 22px 0 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.panel h3:first-child { margin-top: 0; }
+.panel h3::after { content: ''; flex: 1; border-top: 1px dashed var(--line); }
+.tier-label { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+
+/* ---------- Cards & lists ---------- */
+.cards { display: grid; gap: 10px; }
+.place-card {
+  border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+  display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: start;
+}
+.place-card.rank-must { border-color: color-mix(in srgb, var(--route) 45%, var(--line)); }
+.place-card .pc-name { font-weight: 600; font-size: 15px; }
+.place-card .pc-why { color: var(--ink-soft); font-size: 13.5px; grid-column: 1 / -1; }
+.place-card .pc-meta { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); grid-column: 1 / -1; display: flex; gap: 12px; flex-wrap: wrap; }
+.pc-side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+
+/* The passport-stamp rank badge — signature element */
+.stamp {
+  font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 3px 8px; border: 1.5px solid currentColor; border-radius: 4px;
+  transform: rotate(-2.5deg); user-select: none; white-space: nowrap;
+  mask-image: radial-gradient(circle at 30% 60%, black 96%, transparent 97%);
+}
+.stamp.must { color: var(--route); }
+.stamp.solid { color: var(--stamp); }
+.stamp.skip { color: var(--ink-soft); transform: rotate(1.5deg); }
+.stamp.unmissable { color: var(--route); }
+
+.src-badge { font-size: 10.5px; font-family: var(--mono); letter-spacing: 0.04em; padding: 2px 7px; border-radius: 999px; }
+.src-badge.verified { background: color-mix(in srgb, var(--moss) 12%, transparent); color: var(--moss); }
+.src-badge.ai { background: color-mix(in srgb, var(--amber) 12%, transparent); color: var(--amber); }
+
+.add-btn {
+  border: 1px dashed var(--line); background: none; color: var(--stamp); border-radius: 6px;
+  font-size: 12px; padding: 3px 9px;
+}
+.add-btn:hover { border-color: var(--stamp); }
+.add-btn.added { color: var(--moss); border-style: solid; border-color: var(--moss); }
+
+/* ---------- Overview blocks ---------- */
+.ov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.ov-block { border: 1px solid var(--line); border-radius: 8px; padding: 14px; }
+.ov-block h4 { margin: 0 0 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-soft); }
+.ov-block p, .ov-block ul { margin: 0 0 6px; font-size: 14px; }
+.ov-block ul { padding-left: 18px; }
+.ov-block li { margin-bottom: 3px; }
+.big-fact { font-family: var(--display); font-size: 20px; font-weight: 700; }
+.budget-bands { display: flex; gap: 8px; margin-top: 6px; }
+.budget-bands div { flex: 1; text-align: center; border: 1px solid var(--line); border-radius: 6px; padding: 8px 4px; }
+.budget-bands .num { font-family: var(--mono); font-weight: 500; font-size: 15px; display: block; }
+.budget-bands .lbl { font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); }
+.phrase { font-family: var(--mono); font-size: 13px; }
+
+/* ---------- Weather strip ---------- */
+.wx-now { display: flex; gap: 18px; align-items: baseline; flex-wrap: wrap; }
+.wx-now .t { font-family: var(--display); font-size: 34px; font-weight: 700; }
+.wx-months { display: flex; gap: 3px; align-items: flex-end; height: 64px; margin-top: 10px; }
+.wx-months .bar { flex: 1; background: color-mix(in srgb, var(--stamp) 35%, transparent); border-radius: 2px 2px 0 0; position: relative; min-height: 3px; }
+.wx-months .bar span { position: absolute; bottom: -16px; left: 0; right: 0; text-align: center; font-family: var(--mono); font-size: 9px; color: var(--ink-soft); }
+
+/* ---------- Events / flights ---------- */
+.event-row { display: grid; grid-template-columns: 86px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.event-row .date { font-family: var(--mono); font-size: 12px; color: var(--stamp); }
+.event-row .name { font-weight: 600; font-size: 14.5px; }
+.event-row .venue { color: var(--ink-soft); font-size: 13px; }
+
+/* ---------- History ---------- */
+.hist-row { display: flex; align-items: center; gap: 12px; padding: 12px 4px; border-bottom: 1px dashed var(--line); }
+.hist-row button.open { background: none; border: none; text-align: left; flex: 1; font-size: 15px; font-weight: 600; color: var(--ink); padding: 0; }
+.hist-row button.open:hover { color: var(--stamp); }
+.hist-row .when { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); }
+.hist-row .del { background: none; border: none; color: var(--ink-soft); font-size: 16px; }
+.hist-row .del:hover { color: var(--route); }
+.filter-input { width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; }
+
+/* ---------- My Trip ---------- */
+.trip-day { border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; }
+.trip-day header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-bottom: 1px dashed var(--line); }
+.trip-day header h4 { margin: 0; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+.trip-day ul { list-style: none; margin: 0; padding: 8px; min-height: 44px; }
+.trip-day li {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px; margin-bottom: 6px;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 6px; cursor: grab; font-size: 14px;
+}
+.trip-day li .cat { font-family: var(--mono); font-size: 10px; color: var(--ink-soft); text-transform: uppercase; }
+.trip-day li .rm { margin-left: auto; background: none; border: none; color: var(--ink-soft); }
+.trip-day.drag-over { border-color: var(--stamp); background: color-mix(in srgb, var(--stamp) 4%, transparent); }
+.trip-empty { color: var(--ink-soft); font-size: 13px; text-align: center; padding: 8px; }
+.trip-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.trip-actions button { border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 8px 14px; font-size: 13.5px; font-weight: 500; }
+.trip-actions button:hover { border-color: var(--ink); }
+.notes-area { width: 100%; min-height: 110px; border: 1px solid var(--line); border-radius: 8px; padding: 12px; resize: vertical; }
+
+/* ---------- States ---------- */
+.loading { display: flex; align-items: center; gap: 10px; color: var(--ink-soft); padding: 30px 0; font-family: var(--mono); font-size: 13px; }
+.loading::before { content: ''; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--stamp); border-radius: 50%; animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.err { border: 1px solid color-mix(in srgb, var(--route) 40%, var(--line)); background: color-mix(in srgb, var(--route) 5%, transparent); border-radius: 8px; padding: 12px 14px; font-size: 14px; }
+.est-note { font-size: 12.5px; color: var(--amber); font-family: var(--mono); margin: 4px 0 14px; }
+.empty-state { text-align: center; color: var(--ink-soft); padding: 44px 16px; }
+.empty-state .glyph { font-family: var(--mono); font-size: 26px; display: block; margin-bottom: 8px; color: var(--stamp); }
+
+/* ---------- Settings dialog ---------- */
+.dialog-backdrop { position: fixed; inset: 0; background: rgba(24,33,48,.45); display: flex; align-items: center; justify-content: center; z-index: 20; padding: 16px; }
+.dialog { background: var(--card); border-radius: var(--radius); padding: 22px; max-width: 380px; width: 100%; }
+.dialog h3 { margin: 0 0 12px; font-family: var(--display); }
+.dialog label { display: block; font-size: 13px; margin-bottom: 4px; color: var(--ink-soft); }
+.dialog input { width: 100%; padding: 10px; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 14px; }
+
+@media (max-width: 560px) {
+  .panel { padding: 14px; }
+  .event-row { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading::before { animation: none; }
+}
+@media print {
+  .tabbar, .search-row, .trip-meta, .masthead .settings-btn, .trip-actions, .add-btn, .rm { display: none !important; }
+  body { background: #fff; }
+  .panel { border: none; }
+}
