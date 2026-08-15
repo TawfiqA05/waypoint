@@ -26,6 +26,7 @@ async function cachedAsk(cacheKey, prompt) {
 
 const placeLine = (p) => `${p.displayName} (lat ${p.lat}, lon ${p.lon})`;
 
+// Mark items "verified" when the name matches something that exists on OpenStreetMap.
 export function markVerified(items, osm) {
   const names = new Set(osm.map(o => o.name.toLowerCase()));
   return items.map(it => {
@@ -44,7 +45,7 @@ Traveler window: ${trip.start || 'unspecified'} to ${trip.end || 'unspecified'},
 Climate data (real, from Open-Meteo): ${weatherSummary}.
 Respond ONLY with JSON matching:
 {
- "bestTime": {"months": "e.g. Mar-May and Oct", "why": "1-2 sentences weighing weather, prices, crowds"},
+ "bestTime": {"months": "e.g. Mar–May & Oct", "why": "1-2 sentences weighing weather, prices, crowds"},
  "budgetPerDayUSD": {"budget": number, "mid": number, "splurge": number, "note": "what these cover"},
  "packing": ["8-14 items tailored to the season, trip length, and destination"],
  "safety": {"level": "low|moderate|elevated concern", "notes": ["3-6 short items: areas to be careful in, common scams, health/vaccine notes"]},
@@ -103,39 +104,6 @@ You cannot see live prices; give trend guidance only. Respond ONLY with JSON:
  "priciestMonths": "...",
  "bookingTips": ["3-5 short, concrete tips (days to fly, layover hubs, how far ahead to book)"]
 }`;
-}
-
-const MORE_SPECS = {
-  stay: {
-    field: 'hotels', cachePrefix: 'st',
-    item: '{"name":"...","tier":"budget|mid|splurge","rank":"must|solid|skip","pricePerNightUSD":"rough range","why":"1-2 sentences","neighborhood":"..."}'
-  },
-  eat: {
-    field: 'restaurants', cachePrefix: 'ea',
-    item: '{"name":"...","tier":"budget|mid|splurge","rank":"must|solid|skip","cuisine":"...","dish":"one thing to order","why":"1 sentence"}'
-  },
-  seedo: {
-    field: 'sightseeing', cachePrefix: 'sd',
-    item: '{"name":"...","rank":"must|solid|skip","why":"1 sentence"}'
-  }
-};
-
-export async function runMore(kind, p, existingNames) {
-  const spec = MORE_SPECS[kind];
-  const prompt = `You are a travel researcher for ${placeLine(p)}.
-Already recommended (do NOT repeat any of these): ${existingNames.join('; ')}.
-Suggest 6-8 MORE genuinely different options across tiers. Real places you are confident exist. Respond ONLY with JSON:
-{"items":[${spec.item}]}
-${spec.item.includes('tier') ? TIERS + '. ' : ''}${RANKS}.`;
-  const data = await ask(prompt);
-  const items = (data.items || []).filter(it => it && it.name);
-  const cacheKey = `${spec.cachePrefix}:${p.placeId}`;
-  const cached = cacheGet('llm', cacheKey);
-  if (cached && items.length) {
-    cached[spec.field] = [...(cached[spec.field] || []), ...items];
-    cacheSet('llm', cacheKey, cached);
-  }
-  return items;
 }
 
 export const runOverview = (p, w, t) => cachedAsk(`ov:${p.placeId}:${t.start || ''}:${t.days || ''}`, overviewPrompt(p, w, t));
