@@ -1,8 +1,31 @@
-# Waypoint — personal travel intelligence
+# Waypoint
 
-Type a city, state, country, or address and get a full trip dossier: overview, hotels, food, sights, events, and flight guidance — ranked within Budget / Mid-range / Splurge tiers — plus automatic search history and a drag-and-drop itinerary builder.
+Type any city, state, country, or address and get a full trip dossier —
+overview, hotels, food, sights, events, and flight guidance — each ranked
+across Budget / Mid-range / Splurge tiers, with automatic search history and a
+drag-and-drop itinerary builder.
 
-Runs entirely on free tiers. No login required for you or anyone you share it with. All AI calls happen server-side with your own Gemini key — nobody using the site ever touches an Anthropic or Google account.
+*I built it because planning a trip meant juggling a dozen tabs — flights here,
+weather there, "is this neighborhood any good" somewhere else. I wanted one page
+that pulls it together and ranks everything by budget, with no login and no bill.*
+
+**Live:** https://waypoint-theta.vercel.app · no login, runs entirely on free tiers
+
+## Screenshots
+<!-- add: search → the dossier view -->
+<!-- add: the Budget/Mid/Splurge ranked tiers -->
+<!-- add: the drag-and-drop itinerary builder -->
+
+## How it works
+- AI calls run server-side (Vercel functions) with a Gemini key that never reaches the browser
+- Recommendations are cross-checked against real OpenStreetMap places — ✓ verified vs ~ AI-researched badges
+- Aggressive per-location caching keeps it inside the Gemini free tier (revisiting a place costs 0 API calls)
+- Everything saves to localStorage; share a trip through an encoded link, no account needed
+
+## Built with
+Vite + React, Vercel serverless functions, Gemini 2.5 Flash, and a stack of
+keyless data sources (OpenStreetMap / Nominatim / Overpass, Open-Meteo, REST
+Countries, Frankfurter), plus optional Ticketmaster and Unsplash.
 
 ## Deploy (10 minutes, free)
 
