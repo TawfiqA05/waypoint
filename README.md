@@ -31,7 +31,7 @@ Countries, Frankfurter), plus optional Ticketmaster and Unsplash.
 5. Go to https://vercel.com (free Hobby plan), "Add New Project", import the repo. Vercel auto-detects Vite; the `api/` folder becomes serverless functions automatically. No config needed.
 6. In Vercel → Project → Settings → Environment Variables, add:
    - `GEMINI_API_KEY` (required)
-   - `GEMINI_MODEL` (optional, defaults to `gemini-2.5-flash`)
+   - `GEMINI_MODEL` (optional, defaults to `gemini-3.6-flash`)
    - `TICKETMASTER_API_KEY` (optional)
    - `UNSPLASH_ACCESS_KEY` (optional)
 7. Deploy. Done — you get a `*.vercel.app` URL you can open on your phone and share.

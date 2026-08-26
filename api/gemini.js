@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const key = process.env.GEMINI_API_KEY;
   if (!key) return res.status(500).json({ error: 'GEMINI_API_KEY is not set on the server.' });
 
-  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
   const { prompt, json } = req.body || {};
   if (!prompt || typeof prompt !== 'string' || prompt.length > 20000) {
     return res.status(400).json({ error: 'Provide a prompt (string, <20k chars).' });
