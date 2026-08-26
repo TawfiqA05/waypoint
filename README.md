@@ -11,11 +11,6 @@ that pulls it together and ranks everything by budget, with no login and no bill
 
 **Live:** https://waypoint-theta.vercel.app · no login, runs entirely on free tiers
 
-## Screenshots
-<!-- add: search → the dossier view -->
-<!-- add: the Budget/Mid/Splurge ranked tiers -->
-<!-- add: the drag-and-drop itinerary builder -->
-
 ## How it works
 - AI calls run server-side (Vercel functions) with a Gemini key that never reaches the browser
 - Recommendations are cross-checked against real OpenStreetMap places — ✓ verified vs ~ AI-researched badges
