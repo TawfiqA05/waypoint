@@ -1,11 +1,11 @@
 # Waypoint
 
-Type any city, state, country, or address and get a full trip dossier —
-overview, hotels, food, sights, events, and flight guidance — each ranked
+Type any city, state, country, or address and get a full trip dossier:
+overview, hotels, food, sights, events, and flight guidance, each ranked
 across Budget / Mid-range / Splurge tiers, with automatic search history and a
 drag-and-drop itinerary builder.
 
-*I built it because planning a trip meant juggling a dozen tabs — flights here,
+*I built it because planning a trip meant juggling a dozen tabs: flights here,
 weather there, "is this neighborhood any good" somewhere else. I wanted one page
 that pulls it together and ranks everything by budget, with no login and no bill.*
 
@@ -13,7 +13,7 @@ that pulls it together and ranks everything by budget, with no login and no bill
 
 ## How it works
 - AI calls run server-side (Vercel functions) with a Gemini key that never reaches the browser
-- Recommendations are cross-checked against real OpenStreetMap places — ✓ verified vs ~ AI-researched badges
+- Recommendations are cross-checked against real OpenStreetMap places: ✓ verified vs ~ AI-researched badges
 - Aggressive per-location caching keeps it inside the Gemini free tier (revisiting a place costs 0 API calls)
 - Everything saves to localStorage; share a trip through an encoded link, no account needed
 
@@ -34,21 +34,21 @@ Countries, Frankfurter), plus optional Ticketmaster and Unsplash.
    - `GEMINI_MODEL` (optional, defaults to `gemini-3.6-flash`)
    - `TICKETMASTER_API_KEY` (optional)
    - `UNSPLASH_ACCESS_KEY` (optional)
-7. Deploy. Done — you get a `*.vercel.app` URL you can open on your phone and share.
+7. Deploy. You get a `*.vercel.app` URL you can open on your phone and share.
 
-Local dev: `npm install`, then `npx vercel dev` (runs the serverless functions too). Plain `npm run dev` runs the frontend only — AI/events/photos calls will 404 without the functions.
+Local dev: `npm install`, then `npx vercel dev` (runs the serverless functions too). Plain `npm run dev` runs the frontend only, so AI/events/photos calls will 404 without the functions.
 
 ## Decisions I made (and why)
 
-**Frontend + hosting: Vite + React on Vercel Hobby.** Static frontend, three tiny serverless functions in `api/`. Vercel's free tier (100 GB bandwidth, generous function invocations) is far beyond personal use, deploys from git automatically, and — unlike GitHub Pages — gives you server-side functions so API keys never reach the browser. Cloudflare Pages is the backup option if Vercel's terms ever change.
+**Frontend + hosting: Vite + React on Vercel Hobby.** Static frontend, three tiny serverless functions in `api/`. Vercel's free tier (100 GB bandwidth, generous function invocations) is far beyond personal use, deploys from git automatically, and unlike GitHub Pages it gives you server-side functions so API keys never reach the browser. Cloudflare Pages is the backup option if Vercel's terms ever change.
 
-**LLM: Gemini 3.6 Flash free tier, proxied through `/api/gemini`.** The key lives only in a Vercel env var. The model name is an env var too, so when Google rotates model names you change one setting, not code. To switch to Claude later, only `api/gemini.js` changes — the client just POSTs prompts.
+**LLM: Gemini 3.6 Flash free tier, proxied through `/api/gemini`.** The key lives only in a Vercel env var. The model name is an env var too, so when Google rotates model names you change one setting, not code. To switch to Claude later, only `api/gemini.js` changes. The client just POSTs prompts.
 
-**Storage: localStorage, not a database.** For one user (and read-only sharing), a database adds setup, another free-tier dependency, and a failure mode — for zero benefit. Every saved record (history, trips, settings) already carries a `user_id` field, so migrating to Supabase free tier later is a data copy, not a rebuild. Sharing works today via encoded links (below), which need no backend at all.
+**Storage: localStorage, not a database.** For one user (and read-only sharing), a database adds setup, another free-tier dependency, and a failure mode, all for zero benefit. Every saved record (history, trips, settings) already carries a `user_id` field, so migrating to Supabase free tier later is a data copy, not a rebuild. Sharing works today via encoded links (below), which need no backend at all.
 
-**Caching: aggressive, client-side, per location.** Every API and LLM response is cached in localStorage with TTLs — LLM research and place data for 14 days, geocoding 90 days, weather 6 hours, currency and events 1 day. Revisiting a destination (or reopening it from History) costs zero API calls. This is what keeps you comfortably inside the Gemini free tier: a brand-new destination costs ~6 Gemini calls total (one per tab, and only when you open the tab); a revisit costs 0.
+**Caching: aggressive, client-side, per location.** Every API and LLM response is cached in localStorage with TTLs: LLM research and place data for 14 days, geocoding 90 days, weather 6 hours, currency and events 1 day. Revisiting a destination (or reopening it from History) costs zero API calls. This is what keeps you comfortably inside the Gemini free tier: a brand-new destination costs ~6 Gemini calls total (one per tab, and only when you open the tab); a revisit costs 0.
 
-**Data sources (all validated as keyless or free-tier as of mid-2026 — re-check if something breaks):**
+**Data sources (all validated as keyless or free-tier as of mid-2026; re-check if something breaks):**
 | Feature | Source | Key? |
 |---|---|---|
 | Geocoding (the search bar) | OSM Nominatim | none |
@@ -60,15 +60,15 @@ Local dev: `npm install`, then `npx vercel dev` (runs the serverless functions t
 | Destination photo | Unsplash | free key, server-side, optional |
 | Rankings, packing, visa, customs, flights guidance | Gemini free tier | your key, server-side |
 
-**Flights: guidance + deep links, not live prices, in v1.** Amadeus free tier requires OAuth token juggling and Kiwi's Tequila API now gates key issuance behind partner approval — both are fragile foundations for a free personal site. Instead the Flights tab gives AI trend guidance (cheapest months, booking tips, nearest airports from your saved home airport) plus one-click prefilled searches on Google Flights and Kiwi. If you later get an Amadeus key, it slots in as a fourth serverless function.
+**Flights: guidance + deep links, not live prices, in v1.** Amadeus free tier requires OAuth token juggling and Kiwi's Tequila API now gates key issuance behind partner approval. Both are fragile foundations for a free personal site. Instead the Flights tab gives AI trend guidance (cheapest months, booking tips, nearest airports from your saved home airport) plus one-click prefilled searches on Google Flights and Kiwi. If you later get an Amadeus key, it slots in as a fourth serverless function.
 
-**"Verified" vs "AI-researched" badges.** Gemini's recommendations are cross-checked by name against real places pulled from OpenStreetMap around the destination. Matches get a green **✓ verified** badge (the place demonstrably exists); everything else is amber **~ AI-researched** so you know to double-check before booking. Richer verification (ratings, photos) via Google Places' monthly free credit is a clean upgrade path — it would slot into `withOsm()` in `src/components/Ranked.jsx`.
+**"Verified" vs "AI-researched" badges.** Gemini's recommendations are cross-checked by name against real places pulled from OpenStreetMap around the destination. Matches get a green **✓ verified** badge (the place demonstrably exists); everything else is amber **~ AI-researched** so you know to double-check before booking. Richer verification (ratings, photos) via Google Places' monthly free credit is a clean upgrade path. It would slot into `withOsm()` in `src/components/Ranked.jsx`.
 
-**Sharing without accounts.** "Copy share link" in My Trip encodes the itinerary + notes into the URL itself (base64 in the hash). Anyone opening it sees a read-only itinerary view — no backend, no login, works today. "Export PDF" uses the browser's print-to-PDF with a print stylesheet that strips the chrome.
+**Sharing without accounts.** "Copy share link" in My Trip encodes the itinerary + notes into the URL itself (base64 in the hash). Anyone opening it sees a read-only itinerary view: no backend, no login, works today. "Export PDF" uses the browser's print-to-PDF with a print stylesheet that strips the chrome.
 
 ## Free-tier math
 
-Gemini's free tier is generous relative to this app's worst case: 6 requests per *new* destination, and cached destinations cost nothing. Google reports current per-account limits in AI Studio rather than publishing a fixed per-model figure, so check there if you're pushing volume. Nominatim/Overpass ask for light, non-commercial use — a personal site with 14–90-day caching is well within that. Vercel Hobby limits are effectively unreachable for a handful of users.
+Gemini's free tier is generous relative to this app's worst case: 6 requests per *new* destination, and cached destinations cost nothing. Google reports current per-account limits in AI Studio rather than publishing a fixed per-model figure, so check there if you're pushing volume. Nominatim/Overpass ask for light, non-commercial use. A personal site with 14–90-day caching is well within that. Vercel Hobby limits are effectively unreachable for a handful of users.
 
 ## Later, when friends join
 
