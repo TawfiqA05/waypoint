@@ -18,7 +18,7 @@ that pulls it together and ranks everything by budget, with no login and no bill
 - Everything saves to localStorage; share a trip through an encoded link, no account needed
 
 ## Built with
-Vite + React, Vercel serverless functions, Gemini 2.5 Flash, and a stack of
+Vite + React, Vercel serverless functions, Gemini 3.6 Flash, and a stack of
 keyless data sources (OpenStreetMap / Nominatim / Overpass, Open-Meteo, REST
 Countries, Frankfurter), plus optional Ticketmaster and Unsplash.
 
@@ -42,7 +42,7 @@ Local dev: `npm install`, then `npx vercel dev` (runs the serverless functions t
 
 **Frontend + hosting: Vite + React on Vercel Hobby.** Static frontend, three tiny serverless functions in `api/`. Vercel's free tier (100 GB bandwidth, generous function invocations) is far beyond personal use, deploys from git automatically, and — unlike GitHub Pages — gives you server-side functions so API keys never reach the browser. Cloudflare Pages is the backup option if Vercel's terms ever change.
 
-**LLM: Gemini 2.5 Flash free tier, proxied through `/api/gemini`.** The key lives only in a Vercel env var. The model name is an env var too, so when Google rotates model names you change one setting, not code. To switch to Claude later, only `api/gemini.js` changes — the client just POSTs prompts.
+**LLM: Gemini 3.6 Flash free tier, proxied through `/api/gemini`.** The key lives only in a Vercel env var. The model name is an env var too, so when Google rotates model names you change one setting, not code. To switch to Claude later, only `api/gemini.js` changes — the client just POSTs prompts.
 
 **Storage: localStorage, not a database.** For one user (and read-only sharing), a database adds setup, another free-tier dependency, and a failure mode — for zero benefit. Every saved record (history, trips, settings) already carries a `user_id` field, so migrating to Supabase free tier later is a data copy, not a rebuild. Sharing works today via encoded links (below), which need no backend at all.
 
