@@ -68,7 +68,7 @@ Local dev: `npm install`, then `npx vercel dev` (runs the serverless functions t
 
 ## Free-tier math
 
-Gemini free tier allows ~250+ requests/day on Flash-class models. Worst case here is 6 requests per *new* destination. You'd have to research 40+ brand-new places in a day to feel a limit, and cached destinations cost nothing. Nominatim/Overpass ask for light, non-commercial use — a personal site with 14–90-day caching is well within that. Vercel Hobby limits are effectively unreachable for a handful of users.
+Gemini's free tier is generous relative to this app's worst case: 6 requests per *new* destination, and cached destinations cost nothing. Google reports current per-account limits in AI Studio rather than publishing a fixed per-model figure, so check there if you're pushing volume. Nominatim/Overpass ask for light, non-commercial use — a personal site with 14–90-day caching is well within that. Vercel Hobby limits are effectively unreachable for a handful of users.
 
 ## Later, when friends join
 
