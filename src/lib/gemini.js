@@ -38,6 +38,8 @@ export function markVerified(items, osm) {
 
 const RANKS = 'rank must be exactly one of: "must" | "solid" | "skip"';
 const TIERS = 'tier must be exactly one of: "budget" | "mid" | "splurge"';
+// Answers end up in front of visitors, so every prompt asks for plain punctuation.
+const NO_DASHES = 'Do not use em dashes or en dashes anywhere in your answer. Use commas, periods, or the word "to" for ranges.';
 
 export function overviewPrompt(p, weatherSummary, trip) {
   return `You are a meticulous travel researcher. Destination: ${placeLine(p)}.
@@ -45,7 +47,7 @@ Traveler window: ${trip.start || 'unspecified'} to ${trip.end || 'unspecified'},
 Climate data (real, from Open-Meteo): ${weatherSummary}.
 Respond ONLY with JSON matching:
 {
- "bestTime": {"months": "e.g. Mar–May & Oct", "why": "1-2 sentences weighing weather, prices, crowds"},
+ "bestTime": {"months": "e.g. Mar to May and Oct", "why": "1-2 sentences weighing weather, prices, crowds"},
  "budgetPerDayUSD": {"budget": number, "mid": number, "splurge": number, "note": "what these cover"},
  "packing": ["8-14 items tailored to the season, trip length, and destination"],
  "safety": {"level": "low|moderate|elevated concern", "notes": ["3-6 short items: areas to be careful in, common scams, health/vaccine notes"]},
@@ -53,7 +55,8 @@ Respond ONLY with JSON matching:
  "connectivity": {"esim": "best eSIM/SIM options and rough cost", "wifi": "wifi availability"},
  "customs": {"tipping": "...", "dress": "...", "phrases": [{"phrase":"local phrase","meaning":"english"} x3-5]},
  "gettingAround": {"summary": "transit, rideshare, walkability", "airportTransfer": "options + rough cost"}
-}`;
+}
+${NO_DASHES}`;
 }
 
 export function stayPrompt(p, osmSample) {
@@ -64,7 +67,8 @@ Recommend 9-12 total places to stay across tiers. Prefer real, well-known proper
  "neighborhoods": [{"name":"...", "why":"1 sentence on who should stay here"} x3-5],
  "hotels": [{"name":"...", "tier":"budget|mid|splurge", "rank":"must|solid|skip", "pricePerNightUSD":"rough range", "why":"1-2 sentences", "neighborhood":"..."}]
 }
-${TIERS}. ${RANKS}. Include at least one "skip" per tier so rankings are honest.`;
+${TIERS}. ${RANKS}. Include at least one "skip" per tier so rankings are honest.
+${NO_DASHES}`;
 }
 
 export function eatPrompt(p, osmSample) {
@@ -72,7 +76,8 @@ export function eatPrompt(p, osmSample) {
 Real restaurants/cafes known to exist here (from OpenStreetMap): ${osmSample}.
 Recommend 10-14 places across tiers with a genuine mix of cuisines (local staples first, not just tourist-famous spots). Respond ONLY with JSON:
 {"restaurants":[{"name":"...","tier":"budget|mid|splurge","rank":"must|solid|skip","cuisine":"...","dish":"one thing to order","why":"1 sentence"}]}
-${TIERS}. ${RANKS}. Include at least one "skip" per tier.`;
+${TIERS}. ${RANKS}. Include at least one "skip" per tier.
+${NO_DASHES}`;
 }
 
 export function seeDoPrompt(p, osmSample) {
@@ -85,13 +90,15 @@ Respond ONLY with JSON:
  "outdoors": [{"name":"...","type":"hike|park|beach|other","difficulty":"easy|moderate|hard","why":"1 sentence"} x2-5],
  "dayTrips": [{"name":"...","travelTime":"e.g. 1h by train","why":"1 sentence"} x2-4]
 }
-${RANKS}.`;
+${RANKS}.
+${NO_DASHES}`;
 }
 
 export function eventsPrompt(p, windowText) {
   return `Destination: ${placeLine(p)}. Travel window: ${windowText || 'unspecified'}.
 List recurring seasonal festivals/holidays a visitor should plan around (worth attending, or worth avoiding for crowds/closures). Respond ONLY with JSON:
-{"seasonal":[{"name":"...","when":"month/season","attendOrAvoid":"attend|avoid|depends","why":"1 sentence"} x4-8]}`;
+{"seasonal":[{"name":"...","when":"month/season","attendOrAvoid":"attend|avoid|depends","why":"1 sentence"} x4-8]}
+${NO_DASHES}`;
 }
 
 export function flightsPrompt(p, homeAirport) {
@@ -103,7 +110,8 @@ You cannot see live prices; give trend guidance only. Respond ONLY with JSON:
  "cheapestMonths": "...",
  "priciestMonths": "...",
  "bookingTips": ["3-5 short, concrete tips (days to fly, layover hubs, how far ahead to book)"]
-}`;
+}
+${NO_DASHES}`;
 }
 
 export const runOverview = (p, w, t) => cachedAsk(`ov:${p.placeId}:${t.start || ''}:${t.days || ''}`, overviewPrompt(p, w, t));
