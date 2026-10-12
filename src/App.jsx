@@ -1,6 +1,7 @@
 import React from 'react';
 import { geocode, photo } from './lib/apis.js';
 import { addHistory, getTrip, saveTrip, getSettings, saveSettings } from './lib/storage.js';
+import { usableAirport, cleanAirportInput, openingNote, leaveAirportBox, SAVED_BAD_NOTE, TYPED_BAD_NOTE } from './lib/airport.js';
 import Overview from './components/Overview.jsx';
 import { Stay, Eat, SeeDo } from './components/Ranked.jsx';
 import { Events, Flights } from './components/EventsFlights.jsx';
@@ -28,6 +29,8 @@ export default function App() {
   const [, force] = React.useReducer(x => x + 1, 0); // re-render after trip adds
 
   const trip = { ...tripMeta, days: daysBetween(tripMeta.start, tripMeta.end) };
+  // A saved home airport that fails the rule stays saved but is treated as not set.
+  const homeAirport = usableAirport(settings.homeAirport);
 
   async function search(q, presetTab) {
     const text = (q ?? query).trim();
@@ -80,7 +83,7 @@ export default function App() {
         <h1>Way<span>point</span></h1>
         <span className="tag">personal travel dossiers</span>
         <button className="settings-btn" onClick={() => setShowSettings(true)}>
-          {settings.homeAirport ? `Home: ${settings.homeAirport}` : 'Set home airport'}
+          {homeAirport ? `Home: ${homeAirport}` : 'Set home airport'}
         </button>
       </div>
 
@@ -138,7 +141,7 @@ export default function App() {
             {tab === 'Eat' && <Eat place={place} onAdd={addToTrip} inTrip={inTrip} />}
             {tab === 'See & Do' && <SeeDo place={place} onAdd={addToTrip} inTrip={inTrip} />}
             {tab === 'Events' && <Events place={place} trip={trip} />}
-            {tab === 'Flights' && <Flights place={place} homeAirport={settings.homeAirport} onOpenSettings={() => setShowSettings(true)} />}
+            {tab === 'Flights' && <Flights place={place} homeAirport={homeAirport} onOpenSettings={() => setShowSettings(true)} />}
             {tab === 'History' && <History onOpen={openFromHistory} />}
             {tab === 'My Trip' && <MyTrip place={place} />}
           </div>
@@ -152,20 +155,9 @@ export default function App() {
       )}
 
       {showSettings && (
-        <div className="dialog-backdrop" onClick={e => e.target === e.currentTarget && setShowSettings(false)}>
-          <div className="dialog" role="dialog" aria-label="Settings">
-            <h3>Settings</h3>
-            <label htmlFor="home-airport">Home airport (IATA code, e.g. JFK)</label>
-            <input id="home-airport" defaultValue={settings.homeAirport} maxLength={4}
-                   onKeyDown={e => e.key === 'Enter' && e.target.blur()}
-                   onBlur={e => {
-                     const v = e.target.value.toUpperCase().trim();
-                     saveSettings({ homeAirport: v });
-                     setSettings(getSettings());
-                   }} />
-            <div className="trip-actions"><button onClick={() => setShowSettings(false)}>Done</button></div>
-          </div>
-        </div>
+        <SettingsDialog saved={settings.homeAirport}
+                        onSave={v => { saveSettings({ homeAirport: v }); setSettings(getSettings()); }}
+                        onClose={() => setShowSettings(false)} />
       )}
     </div>
   );
@@ -177,5 +169,40 @@ function getHistoryPreview(onOpen) {
       <h3><span className="tier-label">Recent dossiers</span></h3>
       <History onOpen={onOpen} />
     </>
+  );
+}
+
+function SettingsDialog({ saved, onSave, onClose }) {
+  // The box opens with the saved value exactly as stored, even one that fails the rule.
+  const [box, setBox] = React.useState(typeof saved === 'string' ? saved : '');
+  const [changed, setChanged] = React.useState(false);
+  const [note, setNote] = React.useState(() => openingNote(saved));
+
+  const leave = () => {
+    const r = leaveAirportBox(box, changed, note);
+    if (r.save !== undefined) onSave(r.save);
+    setChanged(false);
+    setNote(r.note);
+  };
+
+  return (
+    <div className="dialog-backdrop" onClick={e => e.target === e.currentTarget && onClose()}>
+      <div className="dialog" role="dialog" aria-label="Settings">
+        <h3>Settings</h3>
+        <label htmlFor="home-airport">Home airport (IATA code, e.g. JFK)</label>
+        <input id="home-airport" value={box} autoCapitalize="characters" autoComplete="off" spellCheck={false}
+               aria-invalid={note ? 'true' : undefined}
+               aria-describedby={note ? 'home-airport-note' : undefined}
+               onChange={e => { setBox(cleanAirportInput(e.target.value)); setChanged(true); setNote(null); }}
+               onKeyDown={e => e.key === 'Enter' && leave()}
+               onBlur={leave} />
+        {note && (
+          <p id="home-airport-note" className="field-note" role={note === 'typed' ? 'status' : undefined}>
+            {note === 'typed' ? TYPED_BAD_NOTE : SAVED_BAD_NOTE}
+          </p>
+        )}
+        <div className="trip-actions"><button onClick={onClose}>Done</button></div>
+      </div>
+    </div>
   );
 }
