@@ -155,7 +155,7 @@ export default function App() {
         <div className="dialog-backdrop" onClick={e => e.target === e.currentTarget && setShowSettings(false)}>
           <div className="dialog" role="dialog" aria-label="Settings">
             <h3>Settings</h3>
-            <label htmlFor="home-airport">Home airport (IATA code, e.g. IND)</label>
+            <label htmlFor="home-airport">Home airport (IATA code, e.g. JFK)</label>
             <input id="home-airport" defaultValue={settings.homeAirport} maxLength={4}
                    onKeyDown={e => e.key === 'Enter' && e.target.blur()}
                    onBlur={e => {

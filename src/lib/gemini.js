@@ -95,11 +95,11 @@ List recurring seasonal festivals/holidays a visitor should plan around (worth a
 }
 
 export function flightsPrompt(p, homeAirport) {
-  return `Flight-planning guidance from ${homeAirport || 'a mid-size US airport'} to ${p.city || p.name}, ${p.country}.
+  return `Flight-planning guidance from ${homeAirport || 'a US airport'} to ${p.city || p.name}, ${p.country}.
 You cannot see live prices; give trend guidance only. Respond ONLY with JSON:
 {
  "nearestAirports": [{"code":"XXX","name":"..."} x1-3],
- "typicalRoundTripUSD": "realistic range from ${homeAirport || 'the US Midwest'}",
+ "typicalRoundTripUSD": "realistic range from ${homeAirport || 'a US airport'}",
  "cheapestMonths": "...",
  "priciestMonths": "...",
  "bookingTips": ["3-5 short, concrete tips (days to fly, layover hubs, how far ahead to book)"]

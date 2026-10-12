@@ -54,7 +54,7 @@ export function Flights({ place, homeAirport, onOpenSettings }) {
   return (
     <div>
       {!homeAirport && (
-        <p className="est-note">No home airport set — guidance below assumes the US Midwest. <button className="add-btn" onClick={onOpenSettings}>Set home airport</button></p>
+        <p className="est-note">No home airport set, so the guidance below assumes a US airport. <button className="add-btn" onClick={onOpenSettings}>Set home airport</button></p>
       )}
       {loading ? <Loading text="Researching routes…" /> : error ? <Err error={error} retry={retry} /> : data && (
         <div className="ov-grid">
