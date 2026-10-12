@@ -45,7 +45,7 @@ test('with a home airport the flights prompt uses it, not the fallback', () => {
 
 test('no prompt the code builds contains an em or en dash', () => {
   for (const [name, p] of allPrompts()) {
-    assert.doesNotMatch(p, /[–—]/, `${name} has an em or en dash`);
+    assert.doesNotMatch(p, /[\u2013\u2014]/, `${name} has an em or en dash`);
   }
 });
 
@@ -56,6 +56,6 @@ test('every prompt tells the model to use no em or en dashes', () => {
 });
 
 test('the dash check itself catches a dash (control)', () => {
-  assert.match('Mar–May', /[–—]/);
-  assert.match('set — guidance', /[–—]/);
+  assert.match('Mar\u2013May', /[\u2013\u2014]/);
+  assert.match('set \u2014 guidance', /[\u2013\u2014]/);
 });
